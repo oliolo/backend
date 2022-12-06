@@ -1,6 +1,8 @@
 # Files #
 #########
 settings.py
+recipes\migrations
+recipes\__pycache__
 
 # Compiled source #
 ###################
