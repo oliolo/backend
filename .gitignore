@@ -1,7 +1,7 @@
 # Files #
 #########
 settings.py
-recipes\migrations
+recipes/migrations
 
 
 # Compiled source #
@@ -41,5 +41,5 @@ recipes\migrations
 .Trashes
 ehthumbs.db
 Thumbs.db
-recipes\__pycache__
-backend\__pycache__
+recipes/__pycache__
+backend/__pycache__
