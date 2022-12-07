@@ -3,15 +3,15 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.urls import reverse
+from datetime import date
 
 
 # Create your models here.
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
-    decription = models.TextField()
+    description = models.TextField()
     portionSize = models.BigIntegerField()
-    creationDate = models.DateField()
-    creationDate.auto_now_add = True
+    creationDate = models.DateField(default=date.today())
     slug = models.SlugField(null=False, unique=True)
     
     def __str__(self):
