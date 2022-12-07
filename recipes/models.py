@@ -4,6 +4,7 @@ from django.db import models
 from django.db import models
 from django.urls import reverse
 from datetime import date
+from django.template.defaultfilters import slugify
 
 
 # Create your models here.
@@ -19,3 +20,9 @@ class Recipe(models.Model):
     
     def get_absolute_url(self):
         return reverse("recipe_detail", kwargs={"slug": self.slug})
+    
+    
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
