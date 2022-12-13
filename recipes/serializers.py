@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Recipe
+from .models import *
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -8,3 +8,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ['name', 'description', 'portionSize', 'slug']
         
+        
+class CategorySerializer(serializers.modelSerializer):
+    class Meta:
+        model = Category
+        fields = ['name', 'description']
