@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from sshtunnel import SSHTunnelForwarder
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,18 +76,36 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
+ssh_tunnel = SSHTunnelForwarder(
+    '130.240.200.84',
+    ssh_username="romerm-8",
+    ssh_private_key_password="eXSvdBUtqFHAMTxq",
+    remote_bind_address=("localhost", 3306),
+    )
+
+ssh_tunnel.start()
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
- 'default': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'PORT': ssh_tunnel.local_bind_port,
         'NAME': 'recipe_database',
-        'USER': 'ODBC',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': 'root',
     }
+    
+#  'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'recipe_database',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
 }
 
 
@@ -133,4 +152,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:4200",
+    "http://localhost:3000",
 ]
