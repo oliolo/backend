@@ -12,7 +12,7 @@ class User(models.Model):
     name = models.CharField(max_length=69)
     password = models.TextField()
     savedRecipes = models.ManyToManyField('Recipe')
-    createdRecipes = models.ForeignKey("Recipe", on_delete=models.SET_NULL)
+    createdRecipes = models.ForeignKey("Recipe", on_delete=models.SET_NULL, null=True, related_name="+")
     
     def __str__(self):
         return self.name
@@ -66,7 +66,7 @@ class Category(models.Model):
     
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField()
     
     def __str__(self):
