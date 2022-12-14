@@ -12,7 +12,7 @@ class User(models.Model):
     name = models.CharField(max_length=69)
     password = models.TextField()
     savedRecipes = models.ManyToManyField('Recipe')
-    createdRecipes = models.ForeignKey("Recipe", on_delete=models.SET_NULL)
+    
     
     def __str__(self):
         return self.name
@@ -26,12 +26,13 @@ class Admin(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
+    slug = models.SlugField(null=False, unique=True)
     description = models.TextField()
     portionSize = models.BigIntegerField()
     creationDate = models.DateField()
-    slug = models.SlugField(null=False, unique=True)
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient')
+    author = models.ForeignKey("User", on_delete=models.SET_NULL)
         
     
     def __str__(self):
