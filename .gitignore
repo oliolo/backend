@@ -1,6 +1,6 @@
 # Files #
 #########
-settings.py
+backend/settings.py
 recipes/migrations
 
 
@@ -44,6 +44,4 @@ Thumbs.db
 recipes/__pycache__
 backend/__pycache__
 
-
-backend/settings.py
 db.sqlite3
