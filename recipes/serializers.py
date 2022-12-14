@@ -2,12 +2,6 @@ from rest_framework import serializers
 
 from .models import *
 
-
-
-
-class UserSerializer(serializer.modelSerializer):
-    class Meta:
-        model = User
         
 
 class CategorySerializer(serializers.modelSerializer):
@@ -27,3 +21,16 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
+        
+class UserSerializer(serializers.modelSerializer):
+    createdRecipes = serializers.StringRelatedField(many=True)
+    
+    class Meta:
+        model = User
+        fields = ['name', 'description', 'savedRecipes', 'createdRecipes']
+        
+class AdminSerializer(serializers.modelSerializer):
+    
+    class Meta:
+        model = Admin
+        fields = ['user', 'approvedRecipes']
