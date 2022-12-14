@@ -31,7 +31,7 @@ class Recipe(models.Model):
     creationDate = models.DateField()
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient')
-    author = models.ForeignKey("User", related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
         
     
     def __str__(self):
