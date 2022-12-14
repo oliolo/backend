@@ -32,7 +32,7 @@ class Recipe(models.Model):
     creationDate = models.DateField()
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient')
-    author = models.ForeignKey("User", related_name='createdRecipes', on_delete=models.SET_NULL)
+    author = models.ForeignKey("User", related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
         
     
     def __str__(self):
@@ -67,7 +67,7 @@ class Category(models.Model):
     
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField()
     
     def __str__(self):
