@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
 from rest_framework import viewsets
@@ -8,13 +8,12 @@ from .serializers import RecipeSerializer
 from .models import Recipe
 
 # Create your views here.
+class RecipeView(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    lookup_field = 'slug'
 
-#class RecipeView(viewsets.ModelViewSet):
- #   serializer_class = RecipeSerializer
- #   queryset = Recipe.objects.all()
- #   lookup_field = 'slug'
-
-
+"""
 @api_view(['GET'])
 def apiOverview(request):
     api_urls = {
@@ -65,3 +64,36 @@ def recipeDelete(request, pk):
 
     return Response('Item succsesfully delete!')
     
+
+
+    # Create your views here.  
+def emp(request):  
+    if request.method == "POST":  
+        form = RecipeSerializer(request.POST)  
+        if form.is_valid():  
+            try:  
+                form.save()  
+                return redirect('/show')  
+            except:  
+                pass  
+    else:  
+        form = RecipeSerializer()  
+    return render(request,'index.html',{'form':form})  
+def show(request):  
+    employees = Recipe.objects.all()  
+    return render(request,"show.html",{'employees':employees})  
+def edit(request, id):  
+    employee = Recipe.objects.get(id=id)  
+    return render(request,'edit.html', {'employee':employee})  
+def update(request, id):  
+    employee = Recipe.objects.get(id=id)  
+    form = RecipeSerializer(request.POST, instance = employee)  
+    if form.is_valid():  
+        form.save()  
+        return redirect("/show")  
+    return render(request, 'edit.html', {'employee': employee})  
+def destroy(request, id):  
+    employee = Recipe.objects.get(id=id)  
+    employee.delete()  
+    return redirect("/show")  
+    """
