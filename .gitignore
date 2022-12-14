@@ -43,3 +43,4 @@ ehthumbs.db
 Thumbs.db
 recipes/__pycache__
 backend/__pycache__
+backend/db.sqlite3
