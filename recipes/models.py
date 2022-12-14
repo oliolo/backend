@@ -3,7 +3,6 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.urls import reverse
-from datetime import date
 from django.template.defaultfilters import slugify
 
 

@@ -1,7 +1,6 @@
 # Files #
 #########
 backend/settings.py
-recipes/migrations
 
 
 # Compiled source #
