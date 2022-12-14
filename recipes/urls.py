@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+'''
 urlpatterns = [
 	path('', views.apiOverview, name="api-overview"),
 	path('recipe-list/', views.recipeList, name="recipe-list"),
@@ -9,4 +9,4 @@ urlpatterns = [
 
 	path('recipe-update/<str:pk>/', views.recipeUpdate, name="recipe-update"),
 	path('recipe-delete/<str:pk>/', views.recipeDelete, name="recipe-delete"),
-]
+]'''
