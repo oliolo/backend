@@ -42,6 +42,6 @@ ehthumbs.db
 Thumbs.db
 recipes/__pycache__
 backend/__pycache__
-recipes/migrations
+backend/recipes/migrations
 recipes\migrations
 db.sqlite3
