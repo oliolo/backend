@@ -31,11 +31,11 @@ class Recipe(models.Model):
     creationDate = models.DateField()
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient')
-    author = models.ForeignKey("User", related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
         
     
     def __str__(self):
-        return "PK: " + self.pk + "   " + self.name
+        return "PK: " + str(self.pk) + "   " + self.name
     
     def get_absolute_url(self):
         return reverse("recipe_detail", kwargs={"slug": self.slug})
