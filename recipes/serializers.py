@@ -28,8 +28,8 @@ class AdminSerializer(serializers.ModelSerializer):
         fields = ['user', 'approvedRecipes']
 
 class RecipeSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True)
-    ingredients = IngredientSerializer(many=True)
+    categories = CategorySerializer(many=True,read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
     author = serializers.StringRelatedField()
     class Meta:
         model = Recipe
