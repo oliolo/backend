@@ -6,15 +6,11 @@ from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 
-class User(models.Model):
-    email = models.EmailField()
-    name = models.CharField(max_length=69)
-    password = models.TextField()
+class User(models.User):
+
     #savedRecipes = models.ManyToManyField('Recipe')
-    
-    
     def __str__(self):
-        return self.name
+        return self.username
     
 class Admin(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
