@@ -1,6 +1,6 @@
 # Files #
 #########
-backend/settings.py
+backend/settings.py!
 
 
 # Compiled source #
@@ -42,5 +42,7 @@ ehthumbs.db
 Thumbs.db
 recipes/__pycache__
 backend/__pycache__
+
+recipes/migrations/__pycache__
 
 db.sqlite3

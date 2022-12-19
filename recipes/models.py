@@ -10,7 +10,7 @@ class User(models.Model):
     email = models.EmailField()
     name = models.CharField(max_length=69)
     password = models.TextField()
-    savedRecipes = models.ManyToManyField('Recipe')
+    #savedRecipes = models.ManyToManyField('Recipe')
     
     
     def __str__(self):
@@ -35,7 +35,7 @@ class Recipe(models.Model):
         
     
     def __str__(self):
-        return "PK: " + self.pk + "   " + self.name
+        return "PK: " + str(self.pk) + "   " + self.name
     
     def get_absolute_url(self):
         return reverse("recipe_detail", kwargs={"slug": self.slug})

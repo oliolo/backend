@@ -13,15 +13,7 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ['name','description']
-        
-class RecipeSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True)
-    ingredients = IngredientSerializer(many=True)
-    
-    class Meta:
-        model = Recipe
-        fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
-        
+          
 class UserSerializer(serializers.ModelSerializer):
     createdRecipes = serializers.StringRelatedField(many=True)
     
@@ -34,3 +26,11 @@ class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
         fields = ['user', 'approvedRecipes']
+
+class RecipeSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True,read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
+    author = serializers.StringRelatedField()
+    class Meta:
+        model = Recipe
+        fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
