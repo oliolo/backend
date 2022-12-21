@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
         'PORT': ssh_tunnel.local_bind_port,
-        'NAME': 'recipe_database',
+        'NAME': 'recipe_database2',
         'USER': 'root',
         'PASSWORD': 'root',
     }
@@ -107,6 +107,8 @@ DATABASES = {
 #         'PORT': '3306',
 #     }
 }
+
+AUTH_USER_MODEL = 'recipes.User'
 
 
 # Password validation

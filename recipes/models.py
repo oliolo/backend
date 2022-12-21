@@ -1,23 +1,30 @@
 from django.db import models
 
 # Create your models here.
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 
-class User(models.User):
+class User(AbstractUser):
+    first_name = None
+    last_name = None
+    name = models.CharField(max_length=150, null=True)
+    savedRecipes = models.ManyToManyField('Recipe')
+    
 
-    #savedRecipes = models.ManyToManyField('Recipe')
+    #savedRecipes = models.ManyToManyField('Recipe')   
     def __str__(self):
         return self.username
     
-class Admin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    approvedRecipes = models.ManyToManyField('Recipe')
+# class Admin(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+#     approvedRecipes = models.ManyToManyField('Recipe')
     
-    def __str__(self):
-        return self.user
+#     def __str__(self):
+#         return self.user
 
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
@@ -26,8 +33,8 @@ class Recipe(models.Model):
     portionSize = models.BigIntegerField()
     creationDate = models.DateField()
     categories = models.ManyToManyField('Category')
-    ingredients = models.ManyToManyField('Ingredient')
-    author = models.ForeignKey(User, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
+    ingredients = models.ManyToManyField('Ingredient', through= 'IngredientAmount', through_fields=('recipe', 'ingredient'))
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
         
     
     def __str__(self):
@@ -48,6 +55,16 @@ class Ingredient(models.Model):
     
     def __str__(self):
         return self.name
+
+class IngredientAmount(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True)
+    ingredient = models.ForeignKey(Ingredient,  on_delete=models.CASCADE, null=True)
+    amount = models.BigIntegerField()
+
+    def __str__(self):
+        return self.ingredient.__str__ + str(self.amount)
+
+
     
 
 class Category(models.Model):
@@ -62,7 +79,7 @@ class Category(models.Model):
     
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     text = models.TextField()
     
     def __str__(self):
