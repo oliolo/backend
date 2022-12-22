@@ -15,19 +15,19 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['name','description']
           
 class UserSerializer(serializers.ModelSerializer):
-    #createdRecipes = serializers.StringRelatedField(many=True)
+    createdRecipes = serializers.StringRelatedField(many=True)
     savedRecipes = serializers.StringRelatedField(many=True)
     groups = serializers.StringRelatedField(many=True)
     
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'groups', 'savedRecipes']
+        fields = ['email', 'username', 'password', 'groups', 'savedRecipes', 'createdRecipes']
 
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True)
-    ingredients = serializers.StringRelatedField(many=True)
+    categories = CategorySerializer(many=True, read_only=True)
+    ingredients = serializers.StringRelatedField(many=True, read_only=True)
     author = serializers.StringRelatedField()
     class Meta:
         model = Recipe

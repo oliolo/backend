@@ -11,10 +11,13 @@ from django.template.defaultfilters import slugify
 class User(AbstractUser):
     first_name = None
     last_name = None
+    username = None
+    email = models.EmailField(unique=True)
+    USERNAME_FIELD = email
     name = models.CharField(max_length=150, null=True)
     savedRecipes = models.ManyToManyField('Recipe')
     
-
+    REQUIRED_FIELDS = []
     #savedRecipes = models.ManyToManyField('Recipe')   
     def __str__(self):
         return self.username
