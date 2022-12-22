@@ -5,15 +5,16 @@ from .models import *
 # Register your models here.
    
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "name", "password")
+    list_display = ("email", "username", "password")
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("name", "description", "portionSize", "creationDate", 'get_author')
+    list_display = ("name", "description", "portionSize", "creationDate")
 
-    def get_author(self, obj):
-        return obj.recipe.author
-    get_author.short_description = 'Author'
-    get_author.admin_order_field = 'recipe__author'
+    #Något skapar problem här
+    #def get_author(self, obj):
+    #    return obj.recipe.author
+    #get_author.short_description = 'Author'
+    #get_author.admin_order_field = 'recipe__author'
 
 
 class CategoryAdmin(admin.ModelAdmin):
