@@ -20,8 +20,10 @@ from recipes import views
 
 router = routers.DefaultRouter()
 router.register(r'recipes', views.RecipeView, 'recipe')
+router.register(r'users', views.UserView, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
     path('', include(router.urls)),
 ]

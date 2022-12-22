@@ -4,14 +4,18 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import RecipeSerializer
-from .models import Recipe
+from .serializers import *
+from .models import *
 
 # Create your views here.
 class RecipeView(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     lookup_field = 'slug'
+
+class UserView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 """
 @api_view(['GET'])
