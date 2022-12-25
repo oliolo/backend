@@ -15,34 +15,29 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['name','description']
           
 class UserSerializer(serializers.ModelSerializer):
-    #createdRecipes = serializers.StringRelatedField(many=True)
+    createdRecipes = serializers.StringRelatedField(many=True)
     savedRecipes = serializers.StringRelatedField(many=True)
     groups = serializers.StringRelatedField(many=True)
     
     class Meta:
         model = User
-        fields = ['is_superuser', 'email', 'username', 'password', 'groups', 'savedRecipes']
+        fields = ['is_superuser', 'is_staff',  'email', 'password', 'groups', 'savedRecipes', 'createdRecipes']
 
 
-
-class RecipeSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(many=True)
-    ingredients = serializers.StringRelatedField(many=True)
-    author = serializers.StringRelatedField()
-    class Meta:
-        model = Recipe
-        fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
-
-class IngredientAmountSerializer(serializers.ModelSerializer):
-    recipe = RecipeSerializer(many=True)
+class IngredientAmountSerializer(serializers.ModelSerializer):    
     ingredient = IngredientSerializer()
-
-    def get_recipe(self, obj):
-        return obj.recipe.name
-
-    def get_ingredient(self, obj):
-        return obj.ingredient.name
 
     class Meta:
         model = IngredientAmount
-        fields = ['get_recipe', 'get_ingredient', 'amount']
+        fields = ['ingredient','amount']
+
+        
+class RecipeSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)
+    ingredients = IngredientAmountSerializer(many=True, source='ingredientamount_set', read_only=True)
+    author = UserSerializer()
+    class Meta:
+        model = Recipe
+        fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
+        depth = 2
+s

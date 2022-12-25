@@ -5,10 +5,11 @@ from .models import *
 # Register your models here.
    
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "username", "password")
+    list_display = ("email", "password")
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "portionSize", "creationDate")
+    inlines = (IngredientAmountInline,)
 
     #Något skapar problem här
     #def get_author(self, obj):
@@ -22,9 +23,14 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
+    inlines = (IngredientAmountInline,)
 
 class CommentAdmin(admin.ModelAdmin):
     pass
+
+
+
+
 
 class IngredientAmountAdmin(admin.ModelAdmin):
     list_display = ('get_recipe', 'get_ingredient', 'amount')
