@@ -1,34 +1,69 @@
 from django.db import models
 
+from django.contrib import admin
+
+
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from django.contrib.auth.base_user import BaseUserManager
+
+
+
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+    def _create_user(self, email, password, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email=email, password=password, **extra_fields)
+
+    def create_staff(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email=email, password=password, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self._create_user(email=email, password=password, **extra_fields)
 
 
 class User(AbstractUser):
     first_name = None
     last_name = None
     username = None
-    email = models.EmailField(unique=True)
-    USERNAME_FIELD = email
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    USERNAME_FIELD = 'email'
     name = models.CharField(max_length=150, null=True)
     savedRecipes = models.ManyToManyField('Recipe')
     
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['password']
+
+    objects = UserManager()
     #savedRecipes = models.ManyToManyField('Recipe')   
     def __str__(self):
-        return self.username
+        return self.email
     
-# class Admin(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-#     approvedRecipes = models.ManyToManyField('Recipe')
-    
-#     def __str__(self):
-#         return self.user
-
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
     slug = models.SlugField(null=False, unique=True)
@@ -38,7 +73,10 @@ class Recipe(models.Model):
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient', through= 'IngredientAmount', through_fields=('recipe', 'ingredient'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
-        
+    
+
+    def get_author(self, obj):
+        return obj.author.__str__()
     
     def __str__(self):
         return "PK: " + str(self.pk) + "   " + self.name
@@ -61,14 +99,24 @@ class Ingredient(models.Model):
 
 class IngredientAmount(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True)
-    ingredient = models.ForeignKey(Ingredient,  on_delete=models.CASCADE, null=True)
-    amount = models.BigIntegerField()
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, null=True)
+    amount = models.CharField(max_length=100)
+
+    def get_recipe(self, obj):
+        return obj.recipe.name
+
+    def get_ingredient(self, obj):
+        return obj.ingredient.name
+
 
     def __str__(self):
-        return self.ingredient.__str__ + str(self.amount)
+        return self.ingredient.__str__() + str(self.amount)
 
 
     
+class IngredientAmountInline(admin.TabularInline):
+    model = IngredientAmount
+    extra = 1
 
 class Category(models.Model):
     
