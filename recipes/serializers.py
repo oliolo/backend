@@ -25,18 +25,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):    
-    #ingredient = IngredientSerializer()
+    ingredient = IngredientSerializer()
 
     class Meta:
         model = IngredientAmount
-        fields = ['amount']
+        fields = ['ingredient','amount']
 
         
 class RecipeSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
-    ingredients = IngredientAmountSerializer(many=True, read_only=True)
+    ingredients = IngredientAmountSerializer(many=True, source='ingredientamount_set', read_only=True)
     author = UserSerializer()
     class Meta:
         model = Recipe
         fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
-        depth = 1
+        depth = 2
+s

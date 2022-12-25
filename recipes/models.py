@@ -71,7 +71,7 @@ class Recipe(models.Model):
     portionSize = models.BigIntegerField()
     creationDate = models.DateField()
     categories = models.ManyToManyField('Category')
-    ingredients = models.ManyToManyField('Ingredient', through= 'IngredientAmount', through_fields=('recipe', 'ingredient'))
+    ingredients = models.ManyToManyField('Ingredient', through= 'IngredientAmount')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
     
 
