@@ -22,6 +22,8 @@ router = routers.DefaultRouter()
 router.register(r'recipes', views.RecipeView, 'recipe')
 router.register(r'users', views.UserView, 'user')
 router.register(r'categories', views.CategoryView, 'category')
+router.register(r'ingredients', views.IngredientView, 'ingredient')
+router.register(r'ingredients-amount', views.IngredientAmountView, 'ingredient-amount')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

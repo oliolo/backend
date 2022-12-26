@@ -21,6 +21,14 @@ class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer 
 
+class IngredientView(viewsets.ModelViewSet):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+
+class IngredientAmountView(viewsets.ModelViewSet):
+    queryset = IngredientAmount.objects.all()
+    serializer_class = IngredientAmountSerializer
+
 """
 @api_view(['GET'])
 def apiOverview(request):
