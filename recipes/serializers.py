@@ -35,8 +35,26 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
     ingredients = IngredientAmountSerializer(many=True, source='ingredientamount_set', read_only=True)
-    author = UserSerializer()
+    author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
         fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
-        depth = 2
+        depth = 1
+
+    def get_author(self, obj):
+        return obj.get_author(obj)
+
+    def create(self, validated_data):
+        recipe = Recipe.objects.create(**validated_data)
+        if ('ingredients' and 'categories') in validated_data:
+            ingredients_data = validated_data.pop('ingredients')
+            category_data = validated_data.pop('categories')
+            
+
+            for ingredientAmount in ingredients_data:
+                IngredientAmount.objects.create(recipe=recipe, **ingredientAmount)
+            
+            for category in category_data:
+                Category.objects.create(recipe=recipe, **category)
+
+        return recipe

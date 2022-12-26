@@ -14,7 +14,6 @@ from django.contrib.auth.base_user import BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    use_in_migrations = True
     def _create_user(self, email, password, **extra_fields):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
@@ -43,6 +42,8 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email=email, password=password, **extra_fields)
 
+    
+
 
 class User(AbstractUser):
     first_name = None
@@ -66,7 +67,7 @@ class User(AbstractUser):
     
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
-    slug = models.SlugField(null=False, unique=True)
+    slug = models.SlugField(null=False, blank=True, unique=True)
     description = models.TextField()
     portionSize = models.BigIntegerField()
     creationDate = models.DateField()
