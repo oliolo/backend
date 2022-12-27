@@ -38,8 +38,9 @@ class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
-        fields = ['name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
+        fields = ['id', 'name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
         depth = 1
+
 
     def get_author(self, obj):
         return obj.get_author(obj)
