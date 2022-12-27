@@ -23,6 +23,7 @@ router.register(r'recipes', views.RecipeView, 'recipe')
 router.register(r'recipeSlugs', views.RecipeSlugView, 'recipe-slug')
 router.register(r'users', views.UserView, 'user')
 router.register(r'categories', views.CategoryView, 'category')
+router.register(r'categories-list', views.CategoryListView, 'category-list')
 router.register(r'ingredients', views.IngredientView, 'ingredient')
 router.register(r'ingredients-amount', views.IngredientAmountView, 'ingredient-amount')
 

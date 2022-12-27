@@ -61,7 +61,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['password']
 
     objects = UserManager()
-    #savedRecipes = models.ManyToManyField('Recipe')   
+
     def __str__(self):
         return self.email
 
@@ -136,7 +136,19 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-    
+class CategoryList(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+
+    def get_recipe(self, obj):
+        return obj.recipe.name
+
+    def get_category(self, obj):
+        return obj.category.name
+
+
+    def __str__(self):
+        return self.category.__str__()
     
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, related_name='comments', on_delete=models.CASCADE)

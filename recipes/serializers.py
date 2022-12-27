@@ -8,12 +8,26 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['name', 'description']
+
+class CategoryListSerializer(serializers.ModelSerializer):    
+    category = CategorySerializer()
+
+    class Meta:
+        model = CategoryList
+        fields = ['pk', 'category']
         
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ['name','description']
-          
+
+class IngredientAmountSerializer(serializers.ModelSerializer):    
+    ingredient = IngredientSerializer()
+
+    class Meta:
+        model = IngredientAmount
+        fields = ['pk', 'ingredient','amount']
+
 class UserSerializer(serializers.ModelSerializer):
     createdRecipes = serializers.StringRelatedField(many=True)
     savedRecipes = serializers.StringRelatedField(many=True)
@@ -22,14 +36,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['is_superuser', 'is_staff',  'email', 'password', 'groups', 'savedRecipes', 'createdRecipes']
-
-
-class IngredientAmountSerializer(serializers.ModelSerializer):    
-    ingredient = IngredientSerializer()
-
-    class Meta:
-        model = IngredientAmount
-        fields = ['pk', 'ingredient','amount']
 
         
 class RecipeSerializer(serializers.ModelSerializer):
