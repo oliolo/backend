@@ -46,8 +46,15 @@ class IngredientAmountAdmin(admin.ModelAdmin):
     get_ingredient.short_description = 'Ingredient'
     get_ingredient.admin_order_field = 'ingredient__name'
 
-    
 
+class RecipeSlugAdmin(admin.ModelAdmin):
+    list_display = ('get_recipe', 'slug')
+
+    def get_recipe(self, obj):
+        return obj.recipe.name
+
+    
+admin.site.register(RecipeSlug, RecipeSlugAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(IngredientAmount, IngredientAmountAdmin)
 admin.site.register(Recipe, RecipeAdmin)

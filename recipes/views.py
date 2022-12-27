@@ -8,10 +8,13 @@ from .serializers import *
 from .models import *
 
 # Create your views here.
+class RecipeSlugView(viewsets.ModelViewSet):
+    queryset = RecipeSlug.objects.all()
+    serializer_class = RecipeSlugSerializer
+
 class RecipeView(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    lookup_field = 'slug'
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()

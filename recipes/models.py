@@ -64,10 +64,21 @@ class User(AbstractUser):
     #savedRecipes = models.ManyToManyField('Recipe')   
     def __str__(self):
         return self.email
+
+class RecipeSlug(models.Model):
+    recipe = models.OneToOneField( 'Recipe',
+        on_delete=models.CASCADE,
+        primary_key=True,)
+    slug = models.SlugField(null=False, blank=True, unique=True)
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
     
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
-    slug = models.SlugField(null=False, blank=True, unique=True)
     description = models.TextField()
     portionSize = models.BigIntegerField()
     creationDate = models.DateField()
@@ -87,12 +98,6 @@ class Recipe(models.Model):
     
     def get_absolute_url(self):
         return reverse("recipe_detail", kwargs={"slug": self.slug})
-    
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.name)
-        return super().save(*args, **kwargs)
-
 
     
 class Ingredient(models.Model):

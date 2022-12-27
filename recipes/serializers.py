@@ -38,7 +38,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
-        fields = ['id', 'name', 'slug', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
+        fields = ['id', 'name', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
         depth = 1
 
 
@@ -59,3 +59,11 @@ class RecipeSerializer(serializers.ModelSerializer):
                 Category.objects.create(recipe=recipe, **category)
 
         return recipe
+
+
+class RecipeSlugSerializer(serializers.ModelSerializer):
+    recipe = RecipeSerializer()
+    
+    class Meta:
+        model = RecipeSlug
+        fields = ['recipe', 'slug']
