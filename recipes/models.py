@@ -71,9 +71,13 @@ class RecipeSlug(models.Model):
         primary_key=True,)
     slug = models.SlugField(null=False, blank=True, unique=True)
 
+
+    def __str__(self):
+        return self.slug
+
     def save(self, *args, **kwargs):  # new
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.recipe.name)
         return super().save(*args, **kwargs)
 
     
@@ -89,15 +93,12 @@ class Recipe(models.Model):
 
     def get_author(self, obj):
         return obj.author.__str__()
-    
-    # def __str__(self):
-    #     return "PK: " + str(self.pk) + "   " + self.name
 
     def __str__(self):
-        return self.slug
+        return self.name
     
-    def get_absolute_url(self):
-        return reverse("recipe_detail", kwargs={"slug": self.slug})
+    # def get_absolute_url(self):
+    #     return reverse("recipe_detail", kwargs={"slug": self.slug})
 
     
 class Ingredient(models.Model):
