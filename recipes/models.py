@@ -79,8 +79,11 @@ class Recipe(models.Model):
     def get_author(self, obj):
         return obj.author.__str__()
     
+    # def __str__(self):
+    #     return "PK: " + str(self.pk) + "   " + self.name
+
     def __str__(self):
-        return "PK: " + str(self.pk) + "   " + self.name
+        return self.slug
     
     def get_absolute_url(self):
         return reverse("recipe_detail", kwargs={"slug": self.slug})
@@ -89,6 +92,7 @@ class Recipe(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
 
     
 class Ingredient(models.Model):
