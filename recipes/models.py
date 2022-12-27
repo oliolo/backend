@@ -89,6 +89,7 @@ class Recipe(models.Model):
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient', through= 'IngredientAmount')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
+    picture = models.FileField(upload_to='media/', null=True)
     
 
     def get_author(self, obj):

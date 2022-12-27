@@ -44,7 +44,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
-        fields = ['id', 'name', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author']
+        fields = ['id', 'name', 'description', 'portionSize', 'creationDate', 'categories', 'ingredients', 'author', 'picture']
         depth = 1
 
 
