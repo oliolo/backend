@@ -22,11 +22,22 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['name','description']
 
 class IngredientAmountSerializer(serializers.ModelSerializer):    
+    ingredient = serializers.SerializerMethodField('get_ingredient')
+
+    class Meta:
+        model = IngredientAmount
+        fields = ['pk', 'ingredient','amount']
+
+    def get_ingredient(self, obj):
+        return obj.get_ingredient(obj)
+
+class IngredientAmountInfoSerializer(serializers.ModelSerializer):    
     ingredient = IngredientSerializer()
 
     class Meta:
         model = IngredientAmount
         fields = ['pk', 'ingredient','amount']
+
 
 class UserSerializer(serializers.ModelSerializer):
     createdRecipes = serializers.StringRelatedField(many=True)
@@ -40,7 +51,7 @@ class UserSerializer(serializers.ModelSerializer):
         
 class RecipeSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
-    ingredients = IngredientAmountSerializer(many=True, source='ingredientamount_set', read_only=True)
+    ingredients = IngredientAmountInfoSerializer(many=True, source='ingredientamount_set', read_only=True)
     author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
