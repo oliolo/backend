@@ -17,11 +17,11 @@ class IngredientSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     createdRecipes = serializers.StringRelatedField(many=True)
     savedRecipes = serializers.StringRelatedField(many=True)
-    groups = serializers.StringRelatedField(many=True)
+    #groups = serializers.StringRelatedField(many=True)
     
     class Meta:
         model = User
-        fields = ['is_superuser', 'is_staff',  'email', 'password', 'groups', 'savedRecipes', 'createdRecipes']
+        fields = ['id', 'is_superuser', 'is_staff',  'email', 'password', 'savedRecipes', 'createdRecipes']
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):    

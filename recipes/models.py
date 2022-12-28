@@ -10,6 +10,9 @@ from django.db import models
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.contrib.auth.base_user import BaseUserManager
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
 
 
 
@@ -56,7 +59,7 @@ class User(AbstractUser):
     )
     USERNAME_FIELD = 'email'
     name = models.CharField(max_length=150, null=True)
-    savedRecipes = models.ManyToManyField('Recipe')
+    savedRecipes = models.ManyToManyField('Recipe', blank=True)
     
     REQUIRED_FIELDS = ['password']
 
@@ -64,6 +67,11 @@ class User(AbstractUser):
     #savedRecipes = models.ManyToManyField('Recipe')   
     def __str__(self):
         return self.email
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 class RecipeSlug(models.Model):
     recipe = models.OneToOneField( 'Recipe',
