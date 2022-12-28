@@ -8,7 +8,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("email", "password")
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("name", "description", "portionSize", "creationDate")
+    list_display = ("name", "description", "portionSize", "creationDate", "picture")
     inlines = (IngredientAmountInline,)
 
     #Något skapar problem här

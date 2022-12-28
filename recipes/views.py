@@ -47,6 +47,10 @@ class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer 
 
+class CategoryListView(viewsets.ModelViewSet):
+    queryset = CategoryList.objects.all()
+    serializer_class = CategoryListSerializer 
+
 class IngredientView(viewsets.ModelViewSet):
     authentication_classes = []
     permission_classes = []
