@@ -15,6 +15,7 @@ class RecipeSlugView(viewsets.ModelViewSet):
     permission_classes = []
     queryset = RecipeSlug.objects.all()
     serializer_class = RecipeSlugSerializer
+    lookup_field = 'slug'
 
 class RecipeView(viewsets.ModelViewSet):
     authentication_classes = []

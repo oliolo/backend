@@ -79,6 +79,9 @@ class RecipeSlug(models.Model):
         primary_key=True,)
     slug = models.SlugField(null=False, blank=True, unique=True)
 
+    
+    def get_absolute_url(self):
+       return reverse("recipeSlug_detail", kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.slug
@@ -87,6 +90,11 @@ class RecipeSlug(models.Model):
         if not self.slug:
             self.slug = slugify(self.recipe.name)
         return super().save(*args, **kwargs)
+
+    # Om vi vill att recept ska raderas tillsamans med recipeslug så ska detta utkommenteras
+    # def delete(self, *args, **kwargs):
+    #     self.recipe.delete()
+    #     super(RecipeSlug, self).delete(*args, **kwargs)
 
     
 class Recipe(models.Model):
