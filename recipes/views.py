@@ -48,6 +48,8 @@ class CategoryView(viewsets.ModelViewSet):
     serializer_class = CategorySerializer 
 
 class CategoryListView(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
     queryset = CategoryList.objects.all()
     serializer_class = CategoryListSerializer 
 
@@ -62,6 +64,12 @@ class IngredientAmountView(viewsets.ModelViewSet):
     permission_classes = []
     queryset = IngredientAmount.objects.all()
     serializer_class = IngredientAmountSerializer
+
+class CommentView(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 """
 @api_view(['GET'])
