@@ -46,6 +46,20 @@ class IngredientAmountAdmin(admin.ModelAdmin):
     get_ingredient.short_description = 'Ingredient'
     get_ingredient.admin_order_field = 'ingredient__name'
 
+class CategoryListAdmin(admin.ModelAdmin):
+    list_display = ('get_recipe', 'get_category')
+    def get_recipe(self, obj):
+        return obj.recipe.name
+    
+    get_recipe.short_description = 'Recipe'
+    get_recipe.admin_order_field = 'recipe__name'
+
+    def get_category(self, obj):
+        return obj.category.name
+
+    get_category.short_description = 'Category'
+    get_category.admin_order_field = 'category__name'
+
 
 class RecipeSlugAdmin(admin.ModelAdmin):
     list_display = ('get_recipe', 'slug')
@@ -57,6 +71,7 @@ class RecipeSlugAdmin(admin.ModelAdmin):
 admin.site.register(RecipeSlug, RecipeSlugAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(IngredientAmount, IngredientAmountAdmin)
+admin.site.register(CategoryList, CategoryListAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
