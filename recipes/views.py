@@ -38,7 +38,7 @@ class UserLogIn(ObtainAuthToken):
         return Response({
             'token': token.key,
             'id': user.pk,
-            'username': user.username
+            'email': user.email
         })
 
 class CategoryView(viewsets.ModelViewSet):
