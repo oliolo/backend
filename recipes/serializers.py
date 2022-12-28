@@ -73,3 +73,8 @@ class RecipeSlugSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeSlug
         fields = ['recipe', 'slug']
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['recipe', 'user', 'text']
