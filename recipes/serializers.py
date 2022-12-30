@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 from .models import *
 
@@ -9,7 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['name', 'description']
 
-class CategoryListSerializer(serializers.ModelSerializer):    
+class CategoryListSerializer(WritableNestedModelSerializer):    
     category = CategorySerializer()
 
     class Meta:
@@ -21,15 +22,13 @@ class IngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = ['name','description']
 
-class IngredientAmountSerializer(serializers.ModelSerializer):    
-    ingredient = serializers.SerializerMethodField('get_ingredient')
+class IngredientAmountSerializer(WritableNestedModelSerializer):    
+    ingredient = IngredientSerializer()
 
     class Meta:
         model = IngredientAmount
         fields = ['pk', 'ingredient','amount']
 
-    def get_ingredient(self, obj):
-        return obj.get_ingredient(obj)
 
 class IngredientAmountInfoSerializer(serializers.ModelSerializer):    
     ingredient = IngredientSerializer()
@@ -39,7 +38,7 @@ class IngredientAmountInfoSerializer(serializers.ModelSerializer):
         fields = ['pk', 'ingredient','amount']
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(WritableNestedModelSerializer):
     createdRecipes = serializers.StringRelatedField(many=True)
     savedRecipes = serializers.StringRelatedField(many=True)
     #groups = serializers.StringRelatedField(many=True)
@@ -49,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'is_superuser', 'is_staff',  'email', 'password', 'savedRecipes', 'createdRecipes']
 
         
-class RecipeSerializer(serializers.ModelSerializer):
+class RecipeSerializer(WritableNestedModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
     ingredients = IngredientAmountInfoSerializer(many=True, source='ingredientamount_set', read_only=True)
     author = serializers.SerializerMethodField('get_author')
@@ -62,30 +61,37 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_author(self, obj):
         return obj.get_author(obj)
 
-    def create(self, validated_data):
-        recipe = Recipe.objects.create(**validated_data)
-        if ('ingredients' and 'categories') in validated_data:
-            ingredients_data = validated_data.pop('ingredients')
-            category_data = validated_data.pop('categories')
-            
-
-            for ingredientAmount in ingredients_data:
-                IngredientAmount.objects.create(recipe=recipe, **ingredientAmount)
-            
-            for category in category_data:
-                Category.objects.create(recipe=recipe, **category)
-
-        return recipe
 
 
-class RecipeSlugSerializer(serializers.ModelSerializer):
+class RecipeSlugSerializer(WritableNestedModelSerializer):
     recipe = RecipeSerializer()
     
     class Meta:
         model = RecipeSlug
         fields = ['recipe', 'slug']
 
-class CommentSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return RecipeSlug.objects.update_or_create(
+            recipe=validated_data.pop('user_id'),
+            slug=validated_data.pop('character'),
+            defaults=validated_data
+        )
+
+    def update(self, instance, validated_data):
+        if 'recipe' in validated_data:
+            nested_serializer = self.fields['recipe']
+            nested_instance = instance.recipe
+            nested_data = validated_data.pop('recipe')
+
+            # Runs the update on whatever serializer the nested data belongs to
+            nested_serializer.update(nested_instance, nested_data)
+
+        # Runs the original parent update(), since the nested fields were
+        # "popped" out of the data
+        return super(UserSerializer, self).update(instance, validated_data)
+
+
+class CommentSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Comment
-        fields = ['recipe', 'user', 'text']
+        fields = ['id', 'recipe', 'user', 'text']

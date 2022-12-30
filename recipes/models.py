@@ -74,14 +74,19 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 class RecipeSlug(models.Model):
+    
     recipe = models.OneToOneField( 'Recipe',
-        on_delete=models.CASCADE,
-        primary_key=True,)
+        on_delete=models.CASCADE)
     slug = models.SlugField(null=False, blank=True, unique=True)
 
     
     def get_absolute_url(self):
        return reverse("recipeSlug_detail", kwargs={"slug": self.slug})
+
+    def update(self, *args, **kwargs):
+        self.slug = slugify(self.recipe.name)
+        print("I AM HERE AND THIS IS MY SLUG: " + self.slug)
+        super().update(**kwargs)
 
     def __str__(self):
         return self.slug
@@ -101,7 +106,7 @@ class Recipe(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
     portionSize = models.BigIntegerField()
-    creationDate = models.DateField()
+    creationDate = models.DateField(null=True, blank=True)
     categories = models.ManyToManyField('Category')
     ingredients = models.ManyToManyField('Ingredient', through= 'IngredientAmount')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='createdRecipes', on_delete=models.SET_NULL, null=True)
@@ -116,6 +121,10 @@ class Recipe(models.Model):
     
     # def get_absolute_url(self):
     #     return reverse("recipe_detail", kwargs={"slug": self.slug})
+
+# class Recipe(admin.TabularInline):
+#     model = Recipe
+#     extra = 1
 
     
 class Ingredient(models.Model):

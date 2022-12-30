@@ -94,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
         'PORT': ssh_tunnel.local_bind_port,
-        'NAME': 'recipe_database4',
+        'NAME': 'recipe_database5',
         'USER': 'root',
         'PASSWORD': 'root',
     }
