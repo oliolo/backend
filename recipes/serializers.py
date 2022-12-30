@@ -88,4 +88,4 @@ class RecipeSlugSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['recipe', 'user', 'text']
+        fields = ['id', 'recipe', 'user', 'text']
