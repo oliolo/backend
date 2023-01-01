@@ -23,14 +23,12 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['id', 'name','description']
 
 class IngredientAmountSerializer(WritableNestedModelSerializer):    
-    ingredient = serializers.SerializerMethodField('get_ingredient', write_only=False)
 
     class Meta:
         model = IngredientAmount
         fields = ['id', 'recipe', 'ingredient','amount']
 
-    def get_ingredient(self, obj):
-        return obj.get_ingredient(obj)
+
     
 
 class IngredientAmountInfoSerializer(serializers.ModelSerializer):    
