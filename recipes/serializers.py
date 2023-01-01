@@ -72,8 +72,8 @@ class RecipeSlugSerializer(WritableNestedModelSerializer):
 
     def create(self, validated_data):
         return RecipeSlug.objects.update_or_create(
-            recipe=validated_data.pop('user_id'),
-            slug=validated_data.pop('character'),
+            recipe=validated_data.pop('recipe'),
+            slug=validated_data.pop('slug'),
             defaults=validated_data
         )
 
