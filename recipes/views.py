@@ -72,6 +72,12 @@ class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+class ContactView(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+
 """
 @api_view(['GET'])
 def apiOverview(request):

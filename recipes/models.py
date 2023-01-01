@@ -14,7 +14,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
-
+from django.core.mail import send_mail
 
 class UserManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -185,4 +185,22 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
     
-    
+class Contact(models.Model):
+    full_name=models.CharField(max_length=100)
+    email=models.EmailField()
+    query=models.TextField()
+    add_time=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.query_txt
+
+    def save(self, *args, **kwargs):
+        send_mail(
+            'Contact Query',
+            'Here is the message.',
+            'admin@admin.com',
+            [self.email],
+            fail_silently=False,
+            html_message=f'<p>{self.full_name}</p><p>{self.query}</p>'
+        )
+        return super(Contact, self).save(*args, **kwargs)

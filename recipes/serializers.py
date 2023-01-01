@@ -23,7 +23,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['id', 'name','description']
 
 class IngredientAmountSerializer(WritableNestedModelSerializer):    
-    ingredient = serializers.SerializerMethodField('get_ingredient', write_only=False)
+    ingredient = serializers.SerializerMethodField('get_ingredient')
 
     class Meta:
         model = IngredientAmount
@@ -98,3 +98,8 @@ class CommentSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'recipe', 'user', 'text']
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ['id', 'full_name', 'email', 'query']
