@@ -128,7 +128,7 @@ class Recipe(models.Model):
 
     
 class Ingredient(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, unique=True)
     description = models.TextField()
     
     def __str__(self):
