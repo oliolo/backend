@@ -40,8 +40,8 @@ class UserLogIn(ObtainAuthToken):
             'token': token.key,
             'id': user.pk,
             'email': user.email,
-            'isStaff': user.is_staff,
-            'isSuperuser': user.is_superuser,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
             # Including created and saved recipes produces an error
         })
 
