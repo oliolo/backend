@@ -39,7 +39,10 @@ class UserLogIn(ObtainAuthToken):
         return Response({
             'token': token.key,
             'id': user.pk,
-            'email': user.email
+            'email': user.email,
+            'isStaff': user.is_staff,
+            'isSuperuser': user.is_superuser,
+            # Including created and saved recipes produces an error
         })
 
 class CategoryView(viewsets.ModelViewSet):
