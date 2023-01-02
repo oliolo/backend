@@ -15,22 +15,20 @@ class CategoryListSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = CategoryList
-        fields = ['pk', 'category']
+        fields = ['id', 'category']
         
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['name','description']
+        fields = ['id', 'name','description']
 
 class IngredientAmountSerializer(WritableNestedModelSerializer):    
-    ingredient = serializers.SerializerMethodField('get_ingredient')
 
     class Meta:
         model = IngredientAmount
-        fields = ['pk', 'recipe', 'ingredient','amount']
+        fields = ['id', 'recipe', 'ingredient','amount']
 
-    def get_ingredient(self, obj):
-        return obj.get_ingredient(obj)
+
     
 
 class IngredientAmountInfoSerializer(serializers.ModelSerializer):    
@@ -38,7 +36,7 @@ class IngredientAmountInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientAmount
-        fields = ['pk', 'ingredient','amount']
+        fields = ['id', 'ingredient','amount']
 
 
 class UserSerializer(WritableNestedModelSerializer):
@@ -98,3 +96,8 @@ class CommentSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'recipe', 'user', 'text']
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ['id', 'full_name', 'email', 'query']
