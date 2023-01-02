@@ -50,8 +50,8 @@ class UserSerializer(WritableNestedModelSerializer):
 
         
 class RecipeSerializer(WritableNestedModelSerializer):
-    categories = CategorySerializer(many=True, read_only=False)
-    ingredients = IngredientAmountInfoSerializer(many=True, source='ingredientamount_set', read_only=False)
+    categories = CategorySerializer(many=True, read_only=False, required = False)
+    ingredients = IngredientAmountInfoSerializer(many=True, source='ingredientamount_set', read_only=False, required = False)
     author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
