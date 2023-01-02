@@ -174,4 +174,7 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
 AWS_QUERYSTRING_AUTH = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+AWS_SES_REGION_NAME = 'eu-north-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-north-1.amazonaws.com'
+
+EMAIL_BACKEND = 'django_ses.SESBackend'

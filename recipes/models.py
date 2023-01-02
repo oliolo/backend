@@ -198,7 +198,7 @@ class Contact(models.Model):
         send_mail(
             'Contact Query',
             'Here is the message.',
-            'admin@admin.com',
+            'oliolo.project1@gmail.com',
             [self.email],
             fail_silently=False,
             html_message=f'<p>{self.full_name}</p><p>{self.query}</p>'
