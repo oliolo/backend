@@ -47,6 +47,13 @@ class UserSerializer(WritableNestedModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'is_superuser', 'is_staff',  'email', 'password', 'savedRecipes', 'createdRecipes']
+        
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = super().create(validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
         
 class RecipeSerializer(WritableNestedModelSerializer):
