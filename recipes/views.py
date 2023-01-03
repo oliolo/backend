@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +9,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 class RecipeSlugView(viewsets.ModelViewSet):
@@ -70,10 +73,17 @@ class IngredientAmountView(viewsets.ModelViewSet):
     serializer_class = IngredientAmountSerializer
 
 class CommentView(viewsets.ModelViewSet):
-    authentication_classes = []
+    authentication_classes = [TokenAuthentication,]
     permission_classes = []
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            return super().destroy(self, request, *args, **kwargs)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 class ContactView(viewsets.ModelViewSet):
     authentication_classes = []
