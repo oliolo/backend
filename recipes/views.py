@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -8,6 +8,11 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
+
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
 
 # Create your views here.
 class RecipeSlugView(viewsets.ModelViewSet):
@@ -26,7 +31,7 @@ class RecipeView(viewsets.ModelViewSet):
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class UserLogIn(ObtainAuthToken):
 
@@ -41,6 +46,9 @@ class UserLogIn(ObtainAuthToken):
             'id': user.pk,
             'email': user.email
         })
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
 
 class CategoryView(viewsets.ModelViewSet):
     authentication_classes = []

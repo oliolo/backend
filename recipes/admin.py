@@ -5,7 +5,7 @@ from .models import *
 # Register your models here.
    
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "password")
+    list_display = ("email", "password", "name")
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "portionSize", "creationDate", "picture")
