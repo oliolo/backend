@@ -40,8 +40,8 @@ class IngredientAmountInfoSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(WritableNestedModelSerializer):
-    createdRecipes = serializers.StringRelatedField(many=True)
-    savedRecipes = serializers.StringRelatedField(many=True)
+    createdRecipes = serializers.StringRelatedField(many=True, read_only=True)
+    savedRecipes = serializers.StringRelatedField(many=True, read_only=True)
     #groups = serializers.StringRelatedField(many=True)
     
     class Meta:
