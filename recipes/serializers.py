@@ -56,10 +56,11 @@ class UserSerializer(WritableNestedModelSerializer):
         return user
     
     def update(self, instance, validated_data):
-        password = validated_data.pop('password')
-        user = super().update(validated_data)
-        user.set_password(password)
-        user.save()
+        password = validated_data.get('password', instance.password)
+        
+        instance = super().update(instance, validated_data)
+        instance.set_password(password)
+        instance.save()
         return instance
 
         

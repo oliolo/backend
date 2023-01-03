@@ -9,6 +9,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 
@@ -26,10 +27,22 @@ class RecipeView(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
+
+class OnlyPostOrPut(IsAuthenticated):
+    
+     def has_permission(self, request, view):
+        if request.method in SAFE_METHODS: # GET, HEAD or OPTIONS
+            return super().has_permission(request, view)
+        else: # PUT, POST
+            return True
+
+    
+
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [OnlyPostOrPut]
+    
 
 class UserLogIn(ObtainAuthToken):
 
