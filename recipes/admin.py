@@ -10,10 +10,14 @@ class UserAdmin(UserAdmin):
     list_display = ("email", "password", )
     exclude =('username', 'last_name', 'first_name')
     fieldsets = [
-        ('Personal info', {'fields': ('name', 'email', 'password')}),
+        ('Personal info', {'fields': ('email', 'password')}),
         ('Important dates', {'fields': ['date_joined']}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     ]
+    add_fieldsets = [('Personal info', {'fields': ('email', 'password')}),
+        ('Important dates', {'fields': ['date_joined']}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),]
+    
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "portionSize", "creationDate", "picture")
