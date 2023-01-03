@@ -4,20 +4,27 @@ from django.contrib.auth.admin import UserAdmin
 from .models import *
 
 # Register your models here.
+
    
 class UserAdmin(UserAdmin):
     ordering =('email',)
     list_display = ("email", "password", )
+    # exclude =('username', 'last_name', 'first_name', 'password1', 'password2')
     exclude =('username', 'last_name', 'first_name')
     fieldsets = [
-        ('Personal info', {'fields': ('email', 'password')}),
+        ('Personal info', {'fields': ('name', 'email', 'password')}),
         ('Important dates', {'fields': ['date_joined']}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     ]
-    add_fieldsets = [('Personal info', {'fields': ('email', 'password')}),
-        ('Important dates', {'fields': ['date_joined']}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),]
-    
+    # fieldsets = [
+    #     ('Personal info', {'fields': ('email', 'password')}),
+    #     ('Important dates', {'fields': ['date_joined']}),
+    #     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    # ]
+    # add_fieldsets = (('Personal info', {'fields': ('name', 'email', 'password')}),
+    #     ('Important dates', {'fields': ['date_joined']}),
+    #     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}))
+
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "portionSize", "creationDate", "picture")
