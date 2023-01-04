@@ -18,6 +18,7 @@ from django.urls import path, include, reverse_lazy, re_path
 from django.views.generic.base import RedirectView
 from rest_framework import routers
 from recipes import views
+from allauth.account.views import ConfirmEmailView
 
 router = routers.DefaultRouter()
 router.register(r'recipes', views.RecipeView, 'recipe')
@@ -36,4 +37,7 @@ urlpatterns = [
     path('api-user-login/', views.UserLogIn.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
+
+    path('dj-rest-auth/facebook/', views.FacebookLogin.as_view(), name='fb_login'),
+    re_path(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
 ]

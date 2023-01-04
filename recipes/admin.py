@@ -6,6 +6,7 @@ from .models import *
 # Register your models here.
 
    
+
 class UserAdmin(UserAdmin):
     ordering =('email',)
     list_display = ("email", "password", )
@@ -24,6 +25,7 @@ class UserAdmin(UserAdmin):
     # add_fieldsets = (('Personal info', {'fields': ('name', 'email', 'password')}),
     #     ('Important dates', {'fields': ['date_joined']}),
     #     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}))
+
 
 
 class RecipeAdmin(admin.ModelAdmin):

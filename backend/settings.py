@@ -44,8 +44,21 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
+    # Extra Apps Installed/Needed
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
+
     'recipes',
 ]
+
+SITE_ID = 1
 
 ASGI_APPLICATION = "backend.asgi.application"
 CHANNEL_LAYERS = {
@@ -53,6 +66,7 @@ CHANNEL_LAYERS = {
         'BACKEND':'channels.layers.InMemoryChannelLayer'
     }
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -184,7 +198,18 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
 AWS_QUERYSTRING_AUTH = False
 
+
+# Telling Allauth that we will NOT use username
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# Don't require username
+ACCOUNT_USERNAME_REQUIRED = False
+# Still require email
+ACCOUNT_EMAIL_REQUIRED = True
+# Login with email (default is username)
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
 AWS_SES_REGION_NAME = 'eu-north-1'
 AWS_SES_REGION_ENDPOINT = 'email.eu-north-1.amazonaws.com'
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
+
