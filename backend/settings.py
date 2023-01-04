@@ -182,6 +182,10 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
 ]
 
+if DEBUG:
+    CORS_ORIGIN_ALLOW_ALL = True
+
+
 REST_FRAMEWORK = {
    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
