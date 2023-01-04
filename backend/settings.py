@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,6 +59,14 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
+
+ASGI_APPLICATION = "backend.asgi.application"
+CHANNEL_LAYERS = {
+    'default':{
+        'BACKEND':'channels.layers.InMemoryChannelLayer'
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -187,7 +198,6 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
 AWS_QUERYSTRING_AUTH = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Telling Allauth that we will NOT use username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -197,3 +207,9 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 # Login with email (default is username)
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+AWS_SES_REGION_NAME = 'eu-north-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-north-1.amazonaws.com'
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+

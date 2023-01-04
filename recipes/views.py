@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
@@ -8,6 +9,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
@@ -28,10 +32,22 @@ class RecipeView(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
+
+class OnlyPostOrPut(IsAuthenticated):
+    
+     def has_permission(self, request, view):
+        if request.method in SAFE_METHODS: # GET, HEAD or OPTIONS
+            return super().has_permission(request, view)
+        else: # PUT, POST
+            return True
+
+    
+
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [OnlyPostOrPut]
+
 
 class UserLogIn(ObtainAuthToken):
 
@@ -44,7 +60,10 @@ class UserLogIn(ObtainAuthToken):
         return Response({
             'token': token.key,
             'id': user.pk,
-            'email': user.email
+            'email': user.email,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+            # Including created and saved recipes produces an error
         })
 
 class FacebookLogin(SocialLoginView):
@@ -75,10 +94,17 @@ class IngredientAmountView(viewsets.ModelViewSet):
     serializer_class = IngredientAmountSerializer
 
 class CommentView(viewsets.ModelViewSet):
-    authentication_classes = []
+    authentication_classes = [TokenAuthentication,]
     permission_classes = []
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            return super().destroy(self, request, *args, **kwargs)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 class ContactView(viewsets.ModelViewSet):
     authentication_classes = []

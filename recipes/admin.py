@@ -1,11 +1,32 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from .models import *
 
 # Register your models here.
+
    
-class UserAdmin(admin.ModelAdmin):
-    list_display = ("email", "password", "name")
+
+class UserAdmin(UserAdmin):
+    ordering =('email',)
+    list_display = ("email", "password", )
+    # exclude =('username', 'last_name', 'first_name', 'password1', 'password2')
+    exclude =('username', 'last_name', 'first_name')
+    fieldsets = [
+        ('Personal info', {'fields': ('name', 'email', 'password')}),
+        ('Important dates', {'fields': ['date_joined']}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    ]
+    # fieldsets = [
+    #     ('Personal info', {'fields': ('email', 'password')}),
+    #     ('Important dates', {'fields': ['date_joined']}),
+    #     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    # ]
+    # add_fieldsets = (('Personal info', {'fields': ('name', 'email', 'password')}),
+    #     ('Important dates', {'fields': ['date_joined']}),
+    #     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}))
+
+
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "portionSize", "creationDate", "picture")
@@ -67,9 +88,9 @@ class RecipeSlugAdmin(admin.ModelAdmin):
     def get_recipe(self, obj):
         return obj.recipe.name
 
-    
-admin.site.register(RecipeSlug, RecipeSlugAdmin)
+
 admin.site.register(User, UserAdmin)
+admin.site.register(RecipeSlug, RecipeSlugAdmin)
 admin.site.register(IngredientAmount, IngredientAmountAdmin)
 admin.site.register(CategoryList, CategoryListAdmin)
 admin.site.register(Recipe, RecipeAdmin)

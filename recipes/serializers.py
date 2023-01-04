@@ -40,18 +40,33 @@ class IngredientAmountInfoSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(WritableNestedModelSerializer):
-    createdRecipes = serializers.StringRelatedField(many=True)
-    savedRecipes = serializers.StringRelatedField(many=True)
+    createdRecipes = serializers.StringRelatedField(many=True, read_only=True)
+    savedRecipes = serializers.StringRelatedField(many=True, read_only=True)
     #groups = serializers.StringRelatedField(many=True)
     
     class Meta:
         model = User
         fields = ['id', 'is_superuser', 'is_staff',  'email', 'password', 'savedRecipes', 'createdRecipes']
+        
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = super().create(validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+    
+    def update(self, instance, validated_data):
+        password = validated_data.get('password', instance.password)
+        
+        instance = super().update(instance, validated_data)
+        instance.set_password(password)
+        instance.save()
+        return instance
 
         
 class RecipeSerializer(WritableNestedModelSerializer):
-    categories = CategorySerializer(many=True, read_only=True)
-    ingredients = IngredientAmountInfoSerializer(many=True, source='ingredientamount_set', read_only=True)
+    categories = CategorySerializer(many=True, read_only=False, required = False)
+    ingredients = IngredientAmountInfoSerializer(many=True, source='ingredientamount_set', read_only=False, required = False)
     author = serializers.SerializerMethodField('get_author')
     class Meta:
         model = Recipe
@@ -71,12 +86,12 @@ class RecipeSlugSerializer(WritableNestedModelSerializer):
         model = RecipeSlug
         fields = ['recipe', 'slug']
 
-    def create(self, validated_data):
-        return RecipeSlug.objects.update_or_create(
-            recipe=validated_data.pop('recipe'),
-            slug=validated_data.pop('slug'),
-            defaults=validated_data
-        )
+    # def create(self, validated_data):
+    #     return RecipeSlug.objects.update_or_create(
+    #         recipe=validated_data.pop('recipe'),
+    #         slug=validated_data.pop('slug'),
+    #         defaults=validated_data
+    #     )
 
     def update(self, instance, validated_data):
         if 'recipe' in validated_data:
@@ -89,7 +104,7 @@ class RecipeSlugSerializer(WritableNestedModelSerializer):
 
         # Runs the original parent update(), since the nested fields were
         # "popped" out of the data
-        return super(UserSerializer, self).update(instance, validated_data)
+        return super(RecipeSlugSerializer, self).update(instance, validated_data)
 
 
 class CommentSerializer(WritableNestedModelSerializer):
