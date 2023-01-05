@@ -47,6 +47,12 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [OnlyPostOrPut]
 
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            return super().destroy(self, request, *args, **kwargs)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 class UserLogIn(ObtainAuthToken):
 
@@ -64,6 +70,8 @@ class UserLogIn(ObtainAuthToken):
             'is_superuser': user.is_superuser,
             # Including created and saved recipes produces an error
         })
+
+        
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
