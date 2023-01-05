@@ -41,7 +41,6 @@ class OnlyPostOrPut(IsAuthenticated):
         else: # PUT, POST
             return True
 
-    
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -93,9 +92,17 @@ class IngredientAmountView(viewsets.ModelViewSet):
     queryset = IngredientAmount.objects.all()
     serializer_class = IngredientAmountSerializer
 
+
+class OnlyAutheticatedCanDelete(IsAuthenticated):
+     def has_permission(self, request, view):
+        if request.method == 'DELETE': 
+            return super().has_permission(request, view)
+        else: # PUT, POST, GET, HEAD or OPTIONS
+            return True
+
 class CommentView(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication,]
-    permission_classes = []
+    permission_classes = [OnlyAutheticatedCanDelete]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
