@@ -1,5 +1,7 @@
 # backend
 
+Make sure to have python 3.11.0 version installed where you want to run the backend.
+
 ## Setting up Amazon S3
 
 In the settings.py file there are 3 variables that you need to set up to get the Amazon S3 storage to work. 
