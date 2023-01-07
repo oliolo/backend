@@ -14,8 +14,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, reverse_lazy, re_path
+from django.views.generic.base import RedirectView
+from rest_framework import routers
+from recipes import views
+from allauth.account.views import ConfirmEmailView
+
+router = routers.DefaultRouter()
+router.register(r'recipes', views.RecipeView, 'recipe')
+router.register(r'recipeSlugs', views.RecipeSlugView, 'recipe-slug')
+router.register(r'users', views.UserView, 'user')
+router.register(r'categories', views.CategoryView, 'category')
+router.register(r'categories-list', views.CategoryListView, 'category-list')
+router.register(r'ingredients', views.IngredientView, 'ingredient')
+router.register(r'ingredients-amount', views.IngredientAmountView, 'ingredient-amount')
+router.register(r'comments', views.CommentView, 'comment')
+router.register(r'contact', views.ContactView, 'contact')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('api-user-login/', views.UserLogIn.as_view()),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
+
+    path('dj-rest-auth/facebook/', views.FacebookLogin.as_view(), name='fb_login'),
+    re_path(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
 ]
